@@ -540,6 +540,18 @@
         `;
       }
       
+      // Verifica se o total de calorias dos macros atinge o GET com Déficit e calcula a diferença
+      let totalMacrosHtml = "";
+      if(totalMacros < getComDeficit) {
+          let diff = getComDeficit - totalMacros;
+          totalMacrosHtml = `<span style="color:red;">${totalMacros.toFixed(2)} cal (faltam ${diff.toFixed(2)} cal - ajuste os macros)</span>`;
+      } else if(totalMacros > getComDeficit) {
+          let diff = totalMacros - getComDeficit;
+          totalMacrosHtml = `<span style="color:red;">${totalMacros.toFixed(2)} cal (excedeu ${diff.toFixed(2)} cal - ajuste os macros)</span>`;
+      } else {
+          totalMacrosHtml = `<span style="color:green;">${totalMacros.toFixed(2)} cal (alcançado)</span>`;
+      }
+      
       const resultado = `
         <h5>Resultados da Avaliação Física</h5>
         <div class="card mb-3">
@@ -567,8 +579,11 @@
                 <strong>Carboidrato:</strong> ${carbGramas.toFixed(2)} g = ${calCarboidrato.toFixed(2)} cal 
                 <span class="badge bg-success">${percCarboidrato.toFixed(2)}%</span>
               </li>
-              <li class="list-group-item"><strong>Total de Calorias dos Macros:</strong> ${totalMacros.toFixed(2)} cal</li>
+              <li class="list-group-item">
+                <strong>Total de Calorias dos Macros:</strong> ${totalMacrosHtml}
+              </li>
             </ul>
+            <p class="mt-2 text-muted"><em>Obs: ajuste os macros.</em></p>
           </div>
         </div>
         ${metaMsg}
@@ -761,9 +776,8 @@
       document.getElementById('resultadoBioimpedancia').innerHTML = resultado;
     }
     
-    // Função para imprimir os resultados, incluindo também os valores individuais das dobras
+    // Função para imprimir os resultados, incluindo também os valores individuais das dobras e os dados do paciente
     function printResults() {
-      // Coleta dos resultados já exibidos
       let conteudo = "<h3>Resultados da Avaliação Física</h3>" +
                      document.getElementById('resultadoAvaliacao').innerHTML +
                      "<hr>" +
