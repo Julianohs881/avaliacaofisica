@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Avaliação Completa do Paciente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    body { background-color: #f8f9fa; font-family: Arial, sans-serif; }
+    .card { border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .card-header { background-color: #007bff; color: #fff; font-weight: bold; text-align: center; }
+    .nav-tabs .nav-link, .nav-pills .nav-link { cursor: pointer; }
+    .info-icon { cursor: pointer; font-size: 1.2rem; margin-left: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container my-4" id="printSection">
+    <!-- Dados do Paciente -->
+    <div class="card mb-4">
+      <div class="card-header">Dados do Paciente</div>
+      <div class="card-body">
+        <!-- Novos campos: Nome, Telefone e Email -->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="patientName" class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="patientName" placeholder="Digite seu nome">
+          </div>
+          <div class="col-md-4">
+            <label for="patientPhone" class="form-label">Telefone:</label>
+            <input type="tel" class="form-control" id="patientPhone" placeholder="(XX) XXXXX-XXXX">
+          </div>
+          <div class="col-md-4">
+            <label for="patientEmail" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="patientEmail" placeholder="exemplo@dominio.com">
+          </div>
+        </div>
+        <!-- Campos já existentes -->
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="commonSexo" class="form-label">Sexo:</label>
+            <select class="form-select" id="commonSexo" required>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+            </select>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="commonIdade" class="form-label">Idade (anos):</label>
+            <input type="number" class="form-control" id="commonIdade" placeholder="Ex: 30" required>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="commonPeso" class="form-label">Peso (kg):</label>
+            <input type="number" class="form-control" id="commonPeso" step="0.1" placeholder="Ex: 70.0" required>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="commonAltura" class="form-label">Altura (cm):</label>
+            <input type="number" class="form-control" id="commonAltura" step="0.1" placeholder="Ex: 175" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abas Principais -->
+    <ul class="nav nav-tabs" id="mainTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="avaliacaoFisica-tab" data-bs-toggle="tab" data-bs-target="#avaliacaoFisica" type="button" role="tab" aria-controls="avaliacaoFisica" aria-selected="true">
+          Avaliação Física
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="composicaoCorporal-tab" data-bs-toggle="tab" data-bs-target="#composicaoCorporal" type="button" role="tab" aria-controls="composicaoCorporal" aria-selected="false">
+          Composição Corporal
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="mainTabContent">
+      <!-- Aba Avaliação Física -->
+      <div class="tab-pane fade show active" id="avaliacaoFisica" role="tabpanel" aria-labelledby="avaliacaoFisica-tab">
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Avaliação Física</h5>
+            <!-- Seleção da Fórmula para TMB -->
+            <div class="mb-3">
+              <label class="form-label">Fórmula para TMB:</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="formula" id="harris" value="harris" checked>
+                <label class="form-check-label" for="harris">Harris-Benedict</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="formula" id="mifflin" value="mifflin">
+                <label class="form-check-label" for="mifflin">Mifflin-St Jeor</label>
+              </div>
+            </div>
+            <!-- Fator de Atividade -->
+            <div class="mb-3">
+              <label for="atividade" class="form-label">Fator de Atividade:</label>
+              <select class="form-select" id="atividade">
+                <option value="1.2">Sedentário (1.2)</option>
+                <option value="1.375">Levemente ativo (1.375)</option>
+                <option value="1.55">Moderadamente ativo (1.55)</option>
+                <option value="1.725">Altamente ativo (1.725)</option>
+                <option value="1.9">Extremamente ativo (1.9)</option>
+              </select>
+            </div>
+            <!-- Macros da Dieta -->
+            <div class="mb-3">
+              <label class="form-label">Macros da Dieta (g/kg):</label>
+              <div class="mb-2">
+                <label for="protFactor" class="form-label">Proteína:</label>
+                <input type="number" class="form-control" id="protFactor" step="0.1" value="2.0">
+              </div>
+              <div class="mb-2">
+                <label for="fatFactor" class="form-label">Gordura:</label>
+                <input type="number" class="form-control" id="fatFactor" step="0.1" value="1.0">
+              </div>
+              <div class="mb-2">
+                <label for="carbFactor" class="form-label">Carboidrato:</label>
+                <input type="number" class="form-control" id="carbFactor" step="0.1" value="3.0">
+              </div>
+            </div>
+            <!-- Déficit e Meta de Perda de Peso -->
+            <div class="mb-3">
+              <label for="deficit" class="form-label">Déficit Calórico Atual (cal/dia):</label>
+              <input type="number" class="form-control" id="deficit" step="0.1" placeholder="Opcional">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Meta de Perda de Peso:</label>
+              <div class="mb-2">
+                <label for="metaPeso" class="form-label">Peso a Perder (kg):</label>
+                <input type="number" class="form-control" id="metaPeso" step="0.1" placeholder="Ex: 5">
+              </div>
+              <div class="mb-2">
+                <label for="tempoMeta" class="form-label">Duração da Meta:</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" id="tempoMeta" step="0.1" placeholder="Ex: 8">
+                  <select class="form-select" id="unidadeMeta">
+                    <option value="dias">Dias</option>
+                    <option value="semanas" selected>Semanas</option>
+                    <option value="meses">Meses</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="calcularAvaliacao()">Calcular Avaliação Física</button>
+            <div id="resultadoAvaliacao" class="mt-3"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Aba Composição Corporal -->
+      <div class="tab-pane fade" id="composicaoCorporal" role="tabpanel" aria-labelledby="composicaoCorporal-tab">
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Composição Corporal</h5>
+            <!-- Abas Internas -->
+            <ul class="nav nav-pills mb-3" id="compSubTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="antropometria-tab" data-bs-toggle="tab" data-bs-target="#antropometria" type="button" role="tab" aria-controls="antropometria" aria-selected="true">
+                  Medidas Antropométricas
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="dobras-tab" data-bs-toggle="tab" data-bs-target="#dobras" type="button" role="tab" aria-controls="dobras" aria-selected="false">
+                  Dobras Cutâneas
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="bioimpedancia-tab" data-bs-toggle="tab" data-bs-target="#bioimpedancia" type="button" role="tab" aria-controls="bioimpedancia" aria-selected="false">
+                  Bioimpedância
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content" id="compSubTabContent">
+              <!-- Aba Medidas Antropométricas -->
+              <div class="tab-pane fade show active" id="antropometria" role="tabpanel" aria-labelledby="antropometria-tab">
+                <div class="row">
+                  <div class="col-md-3 mb-2">
+                    <label for="deltide" class="form-label">Deltide (cm):</label>
+                    <input type="number" class="form-control" id="deltide" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="toraxInspirado" class="form-label">Tórax Inspirado (cm):</label>
+                    <input type="number" class="form-control" id="toraxInspirado" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="toraxExpirado" class="form-label">Tórax Expirado (cm):</label>
+                    <input type="number" class="form-control" id="toraxExpirado" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="cinturaAntro" class="form-label">Cintura (cm):</label>
+                    <input type="number" class="form-control" id="cinturaAntro" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="abdomen" class="form-label">Abdômen (cm):</label>
+                    <input type="number" class="form-control" id="abdomen" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="quadrilAntro" class="form-label">Quadril (cm):</label>
+                    <input type="number" class="form-control" id="quadrilAntro" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="bracoDirContraido" class="form-label">Braço Dir. Contraído (cm):</label>
+                    <input type="number" class="form-control" id="bracoDirContraido" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="bracoDirRelaxado" class="form-label">Braço Dir. Relaxado (cm):</label>
+                    <input type="number" class="form-control" id="bracoDirRelaxado" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="bracoEsqContraido" class="form-label">Braço Esq. Contraído (cm):</label>
+                    <input type="number" class="form-control" id="bracoEsqContraido" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="bracoEsqRelaxado" class="form-label">Braço Esq. Relaxado (cm):</label>
+                    <input type="number" class="form-control" id="bracoEsqRelaxado" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="coxaDir" class="form-label">Coxa Direita (cm):</label>
+                    <input type="number" class="form-control" id="coxaDir" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="coxaEsq" class="form-label">Coxa Esquerda (cm):</label>
+                    <input type="number" class="form-control" id="coxaEsq" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="coxaDirMedial" class="form-label">Coxa Dir. Medial (cm):</label>
+                    <input type="number" class="form-control" id="coxaDirMedial" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="coxaEsqMedial" class="form-label">Coxa Esq. Medial (cm):</label>
+                    <input type="number" class="form-control" id="coxaEsqMedial" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="pernaDir" class="form-label">Perna Direita (cm):</label>
+                    <input type="number" class="form-control" id="pernaDir" step="0.1">
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <label for="pernaEsq" class="form-label">Perna Esquerda (cm):</label>
+                    <input type="number" class="form-control" id="pernaEsq" step="0.1">
+                  </div>
+                </div>
+                <button type="button" class="btn btn-secondary mt-2" onclick="calcularAntropometria()">Calcular Medidas</button>
+                <div id="resultadoAntropometria" class="mt-3"></div>
+              </div>
+              
+              <!-- Aba Dobras Cutâneas (7 dobras) -->
+              <div class="tab-pane fade" id="dobras" role="tabpanel" aria-labelledby="dobras-tab">
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                    <label for="dobraPeito" class="form-label">Peito (mm):</label>
+                    <input type="number" class="form-control" id="dobraPeito" step="0.1">
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <label for="dobraAxilar" class="form-label">Axilar Média (mm):</label>
+                    <input type="number" class="form-control" id="dobraAxilar" step="0.1">
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <label for="dobraTriceps" class="form-label">Tríceps (mm):</label>
+                    <input type="number" class="form-control" id="dobraTriceps" step="0.1">
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <label for="dobraSubescapular" class="form-label">Subescapular (mm):</label>
+                    <input type="number" class="form-control" id="dobraSubescapular" step="0.1">
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <label for="dobraAbdominal" class="form-label">Abdominal (mm):</label>
+                    <input type="number" class="form-control" id="dobraAbdominal" step="0.1">
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <label for="dobraSuprailiaca" class="form-label">Suprailiaca (mm):</label>
+                    <input type="number" class="form-control" id="dobraSuprailiaca" step="0.1">
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <label for="dobraCoxa" class="form-label">Coxa (mm):</label>
+                    <input type="number" class="form-control" id="dobraCoxa" step="0.1">
+                  </div>
+                </div>
+                <button type="button" class="btn btn-secondary mt-2" onclick="calcularDobras()">Calcular Dobras</button>
+                <div id="resultadoDobras" class="mt-3"></div>
+              </div>
+              
+              <!-- Aba Bioimpedância -->
+              <div class="tab-pane fade" id="bioimpedancia" role="tabpanel" aria-labelledby="bioimpedancia-tab">
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label for="bioPercentGordura" class="form-label">Percentual de Gordura (%):</label>
+                    <input type="number" class="form-control" id="bioPercentGordura" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioMassaLivreGordura" class="form-label">Massa Livre de Gordura (kg):</label>
+                    <input type="number" class="form-control" id="bioMassaLivreGordura" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioPesoOsseo" class="form-label">Peso Ósseo (kg):</label>
+                    <input type="number" class="form-control" id="bioPesoOsseo" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioMassaGordura" class="form-label">Massa de Gordura (kg):</label>
+                    <input type="number" class="form-control" id="bioMassaGordura" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioIdadeMetabolica" class="form-label">Idade Metabólica:</label>
+                    <input type="number" class="form-control" id="bioIdadeMetabolica" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioGorduraVisceral" class="form-label">Gordura Visceral (kg):</label>
+                    <input type="number" class="form-control" id="bioGorduraVisceral" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioMassaMuscular" class="form-label">Massa Muscular (kg):</label>
+                    <input type="number" class="form-control" id="bioMassaMuscular" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioMassaVisceral" class="form-label">Massa Visceral (kg):</label>
+                    <input type="number" class="form-control" id="bioMassaVisceral" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioPercMassaMuscular" class="form-label">Percentual de Massa Muscular (%):</label>
+                    <input type="number" class="form-control" id="bioPercMassaMuscular" step="0.1">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="bioAguaCorporal" class="form-label">Água Corporal (kg):</label>
+                    <input type="number" class="form-control" id="bioAguaCorporal" step="0.1">
+                  </div>
+                </div>
+                <button type="button" class="btn btn-secondary mt-2" onclick="calcularBioimpedancia()">Calcular Bioimpedância</button>
+                <div id="resultadoBioimpedancia" class="mt-3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Botão Imprimir -->
+    <div class="text-center mt-4">
+      <button type="button" class="btn btn-success" onclick="printResults()">Imprimir</button>
+    </div>
+  </div>
+
+  <!-- Modal Explicativo (outros parâmetros) -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoModalLabel">Informações</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>TMB:</strong> Calorias necessárias para manter funções vitais em repouso.</p>
+          <p><strong>GET:</strong> TMB multiplicado pelo fator de atividade.</p>
+          <p><strong>Macros:</strong> Conversão dos macronutrientes em calorias (4 cal/g para proteínas e carboidratos; 9 cal/g para gorduras).</p>
+          <p><strong>Meta de Perda de Peso:</strong> Déficit necessário para perder o peso desejado (cerca de 7700 cal para 1 kg de gordura).</p>
+          <p><strong>Medidas Antropométricas:</strong> Diversas medidas do corpo para avaliar a estrutura corporal.</p>
+          <p><strong>Dobras Cutâneas:</strong> Estimativa do percentual de gordura (método de 7 dobras).</p>
+          <p><strong>Bioimpedância:</strong> Técnica que utiliza a resistência elétrica para estimar a composição corporal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Classificação do % de Gordura (7 Dobras) -->
+  <div class="modal fade" id="fatInfoModal" tabindex="-1" aria-labelledby="fatInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="fatInfoModalLabel">Classificação do Percentual de Gordura (7 Dobras)</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p>A tabela apresenta a classificação do percentual de gordura corporal para diferentes faixas etárias, conforme Pollock & Wilmore (1993):</p>
+          <div class="table-responsive">
+            <table class="table table-bordered text-center">
+              <thead>
+                <tr>
+                  <th>Faixa Etária</th>
+                  <th style="background-color:#28a745; color:white;">Excelente</th>
+                  <th style="background-color:#28a745; color:white;">Bom</th>
+                  <th style="background-color:#ffc107;">Abaixo da Média</th>
+                  <th style="background-color:#ffc107;">Média</th>
+                  <th style="background-color:#dc3545; color:white;">Acima da Média</th>
+                  <th style="background-color:#dc3545; color:white;">Alto</th>
+                  <th style="background-color:#dc3545; color:white;">Muito Alto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>18 a 25 anos</td>
+                  <td>13-16%</td>
+                  <td>17-19%</td>
+                  <td>20-22%</td>
+                  <td>23-25%</td>
+                  <td>26-28%</td>
+                  <td>29-31%</td>
+                  <td>33-43%</td>
+                </tr>
+                <tr>
+                  <td>26 a 35 anos</td>
+                  <td>14-16%</td>
+                  <td>18-20%</td>
+                  <td>21-23%</td>
+                  <td>24-25%</td>
+                  <td>27-29%</td>
+                  <td>31-33%</td>
+                  <td>36-49%</td>
+                </tr>
+                <tr>
+                  <td>36 a 45 anos</td>
+                  <td>16-19%</td>
+                  <td>20-23%</td>
+                  <td>24-26%</td>
+                  <td>27-29%</td>
+                  <td>30-32%</td>
+                  <td>33-36%</td>
+                  <td>38-48%</td>
+                </tr>
+                <tr>
+                  <td>46 a 55 anos</td>
+                  <td>17-21%</td>
+                  <td>23-25%</td>
+                  <td>26-28%</td>
+                  <td>29-31%</td>
+                  <td>32-34%</td>
+                  <td>35-38%</td>
+                  <td>39-50%</td>
+                </tr>
+                <tr>
+                  <td>56 a 65 anos</td>
+                  <td>18-22%</td>
+                  <td>24-26%</td>
+                  <td>27-29%</td>
+                  <td>30-32%</td>
+                  <td>33-35%</td>
+                  <td>36-38%</td>
+                  <td>39-49%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Utilize esta tabela para comparar o seu percentual de gordura obtido pelo método das 7 dobras e identificar a sua classificação.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Informação do % de Gordura na Bioimpedância -->
+  <div class="modal fade" id="bioFatInfoModal" tabindex="-1" aria-labelledby="bioFatInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bioFatInfoModalLabel">Informação sobre Gordura Corporal (Bioimpedância)</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p>O percentual de gordura corporal obtido por bioimpedância utiliza a resistência elétrica para estimar a composição corporal. Os valores podem variar conforme o equipamento e o protocolo utilizado. Consulte os parâmetros de referência fornecidos pelo fabricante ou um profissional da área para uma interpretação adequada.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Função para calcular e exibir os resultados da Avaliação Física com layout aprimorado e exibição detalhada dos macros
+    function calcularAvaliacao() {
+      const sexo = document.getElementById('commonSexo').value;
+      const idade = parseFloat(document.getElementById('commonIdade').value);
+      const peso = parseFloat(document.getElementById('commonPeso').value);
+      const altura = parseFloat(document.getElementById('commonAltura').value);
+      
+      const formula = document.querySelector('input[name="formula"]:checked').value;
+      const fatorAtividade = parseFloat(document.getElementById('atividade').value);
+      
+      let tmb = 0;
+      if(formula === 'harris'){
+        tmb = (sexo === 'M') 
+              ? 66.47 + (13.75 * peso) + (5.0 * altura) - (6.76 * idade)
+              : 655.1 + (9.56 * peso) + (1.85 * altura) - (4.68 * idade);
+      } else if(formula === 'mifflin'){
+        tmb = (sexo === 'M')
+              ? (10 * peso) + (6.25 * altura) - (5 * idade) + 5
+              : (10 * peso) + (6.25 * altura) - (5 * idade) - 161;
+      }
+      
+      const get = tmb * fatorAtividade;
+      let deficit = parseFloat(document.getElementById('deficit').value);
+      if(isNaN(deficit)) deficit = 0;
+      const getComDeficit = get - deficit;
+      
+      // Cálculo dos macros em gramas
+      const protFactor = parseFloat(document.getElementById('protFactor').value);
+      const fatFactor = parseFloat(document.getElementById('fatFactor').value);
+      const carbFactor = parseFloat(document.getElementById('carbFactor').value);
+      
+      const protGramas = peso * protFactor;
+      const fatGramas = peso * fatFactor;
+      const carbGramas = peso * carbFactor;
+      
+      // Conversão para calorias (4 cal/g para proteínas e carboidratos; 9 cal/g para gorduras)
+      const calProteina = protGramas * 4;
+      const calGordura = fatGramas * 9;
+      const calCarboidrato = carbGramas * 4;
+      const totalMacros = calProteina + calGordura + calCarboidrato;
+      
+      // Percentuais baseados no GET com déficit
+      const percProteina = (calProteina / getComDeficit) * 100;
+      const percGordura = (calGordura / getComDeficit) * 100;
+      const percCarboidrato = (calCarboidrato / getComDeficit) * 100;
+      
+      const metaPeso = parseFloat(document.getElementById('metaPeso').value);
+      const tempoMeta = parseFloat(document.getElementById('tempoMeta').value);
+      const unidadeMeta = document.getElementById('unidadeMeta').value;
+      
+      let metaMsg = "";
+      if(!isNaN(metaPeso) && metaPeso > 0 && !isNaN(tempoMeta) && tempoMeta > 0) {
+        let totalDias = tempoMeta;
+        if(unidadeMeta === "semanas") totalDias = tempoMeta * 7;
+        else if(unidadeMeta === "meses") totalDias = tempoMeta * 30;
+        const deficitTotalNecessario = metaPeso * 7700;
+        const deficitDiarioNecessario = deficitTotalNecessario / totalDias;
+        
+        metaMsg = `
+          <div class="alert alert-secondary mt-3">
+            <p><strong>Meta de Perda de Peso:</strong> Perder ${metaPeso} kg em ${totalDias} dias</p>
+            <p><strong>Déficit Total Necessário:</strong> ${deficitTotalNecessario.toFixed(2)} cal</p>
+            <p><strong>Déficit Diário Necessário:</strong> ${deficitDiarioNecessario.toFixed(2)} cal/dia</p>
+          </div>
+        `;
+      }
+      
+      const resultado = `
+        <h5>Resultados da Avaliação Física</h5>
+        <div class="card mb-3">
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item"><strong>TMB:</strong> ${tmb.toFixed(2)} cal</li>
+              <li class="list-group-item"><strong>GET:</strong> ${get.toFixed(2)} cal</li>
+              <li class="list-group-item"><strong>GET com Déficit:</strong> ${getComDeficit.toFixed(2)} cal</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">Macros</div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <strong>Proteína:</strong> ${protGramas.toFixed(2)} g = ${calProteina.toFixed(2)} cal 
+                <span class="badge bg-info">${percProteina.toFixed(2)}%</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Gordura:</strong> ${fatGramas.toFixed(2)} g = ${calGordura.toFixed(2)} cal 
+                <span class="badge bg-warning">${percGordura.toFixed(2)}%</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Carboidrato:</strong> ${carbGramas.toFixed(2)} g = ${calCarboidrato.toFixed(2)} cal 
+                <span class="badge bg-success">${percCarboidrato.toFixed(2)}%</span>
+              </li>
+              <li class="list-group-item"><strong>Total de Calorias dos Macros:</strong> ${totalMacros.toFixed(2)} cal</li>
+            </ul>
+          </div>
+        </div>
+        ${metaMsg}
+      `;
+      
+      document.getElementById('resultadoAvaliacao').innerHTML = resultado;
+    }
+    
+    // Função para calcular e exibir os resultados das Medidas Antropométricas
+    function calcularAntropometria() {
+      const deltide = parseFloat(document.getElementById('deltide').value) || 0;
+      const toraxInspirado = parseFloat(document.getElementById('toraxInspirado').value) || 0;
+      const toraxExpirado = parseFloat(document.getElementById('toraxExpirado').value) || 0;
+      const cinturaAntro = parseFloat(document.getElementById('cinturaAntro').value) || 0;
+      const abdomen = parseFloat(document.getElementById('abdomen').value) || 0;
+      const quadrilAntro = parseFloat(document.getElementById('quadrilAntro').value) || 0;
+      const bracoDirContraido = parseFloat(document.getElementById('bracoDirContraido').value) || 0;
+      const bracoDirRelaxado = parseFloat(document.getElementById('bracoDirRelaxado').value) || 0;
+      const bracoEsqContraido = parseFloat(document.getElementById('bracoEsqContraido').value) || 0;
+      const bracoEsqRelaxado = parseFloat(document.getElementById('bracoEsqRelaxado').value) || 0;
+      const coxaDir = parseFloat(document.getElementById('coxaDir').value) || 0;
+      const coxaEsq = parseFloat(document.getElementById('coxaEsq').value) || 0;
+      const coxaDirMedial = parseFloat(document.getElementById('coxaDirMedial').value) || 0;
+      const coxaEsqMedial = parseFloat(document.getElementById('coxaEsqMedial').value) || 0;
+      const pernaDir = parseFloat(document.getElementById('pernaDir').value) || 0;
+      const pernaEsq = parseFloat(document.getElementById('pernaEsq').value) || 0;
+      
+      const mediaBracos = (bracoDirContraido + bracoDirRelaxado + bracoEsqContraido + bracoEsqRelaxado) / 4;
+      const mediaCoxas = (coxaDir + coxaEsq + coxaDirMedial + coxaEsqMedial) / 4;
+      const mediaPernas = (pernaDir + pernaEsq) / 2;
+      const somaToraxAbdomen = deltide + toraxInspirado + toraxExpirado + cinturaAntro + abdomen + quadrilAntro;
+      
+      const resultado = `
+        <h6>Medidas Antropométricas</h6>
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Deltide:</strong> ${deltide} cm</li>
+          <li class="list-group-item"><strong>Tórax Inspirado:</strong> ${toraxInspirado} cm</li>
+          <li class="list-group-item"><strong>Tórax Expirado:</strong> ${toraxExpirado} cm</li>
+          <li class="list-group-item"><strong>Cintura:</strong> ${cinturaAntro} cm</li>
+          <li class="list-group-item"><strong>Abdômen:</strong> ${abdomen} cm</li>
+          <li class="list-group-item"><strong>Quadril:</strong> ${quadrilAntro} cm</li>
+          <li class="list-group-item"><strong>Média dos Braços:</strong> ${mediaBracos.toFixed(2)} cm</li>
+          <li class="list-group-item"><strong>Média das Coxas:</strong> ${mediaCoxas.toFixed(2)} cm</li>
+          <li class="list-group-item"><strong>Média das Pernas:</strong> ${mediaPernas.toFixed(2)} cm</li>
+          <li class="list-group-item"><strong>Soma Tórax/Abdômen:</strong> ${somaToraxAbdomen.toFixed(2)} cm</li>
+        </ul>
+      `;
+      
+      document.getElementById('resultadoAntropometria').innerHTML = resultado;
+    }
+    
+    // Função para calcular e exibir os resultados de Dobras Cutâneas (7 dobras)
+    function calcularDobras() {
+      const sexoVal = document.getElementById('commonSexo').value;
+      const idade = parseFloat(document.getElementById('commonIdade').value);
+      
+      const dobraPeito = parseFloat(document.getElementById('dobraPeito').value) || 0;
+      const dobraAxilar = parseFloat(document.getElementById('dobraAxilar').value) || 0;
+      const dobraTriceps = parseFloat(document.getElementById('dobraTriceps').value) || 0;
+      const dobraSubescapular = parseFloat(document.getElementById('dobraSubescapular').value) || 0;
+      const dobraAbdominal = parseFloat(document.getElementById('dobraAbdominal').value) || 0;
+      const dobraSuprailiaca = parseFloat(document.getElementById('dobraSuprailiaca').value) || 0;
+      const dobraCoxa = parseFloat(document.getElementById('dobraCoxa').value) || 0;
+      
+      const somaDobras7 = dobraPeito + dobraAxilar + dobraTriceps + dobraSubescapular + dobraAbdominal + dobraSuprailiaca + dobraCoxa;
+      
+      let densidade7;
+      if(sexoVal === 'M'){
+        densidade7 = 1.112 - 0.00043499 * somaDobras7 + 0.00000055 * (somaDobras7 * somaDobras7) - 0.00028826 * idade;
+      } else {
+        densidade7 = 1.097 - 0.00046971 * somaDobras7 + 0.00000056 * (somaDobras7 * somaDobras7) - 0.00012828 * idade;
+      }
+      const bf7 = (495 / densidade7) - 450;
+      
+      const classificacao = classifyDobras(idade, bf7);
+      
+      const resultado = `
+        <h6>Dobras Cutâneas</h6>
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Soma das Dobras:</strong> ${somaDobras7.toFixed(2)} mm</li>
+          <li class="list-group-item">
+            <strong>% Gordura (7 dobras):</strong> ${bf7.toFixed(2)}%
+            <i class="bi bi-info-circle info-icon" data-bs-toggle="modal" data-bs-target="#fatInfoModal"></i>
+            (Classificação: ${classificacao})
+          </li>
+        </ul>
+      `;
+      document.getElementById('resultadoDobras').innerHTML = resultado;
+    }
+    
+    // Função para classificar as dobras conforme a faixa etária (Pollock & Wilmore, 1993)
+    function classifyDobras(age, bf) {
+      let classification = "";
+      if(age >= 18 && age <= 25) {
+        if(bf >= 13 && bf <= 16) classification = "Excelente";
+        else if(bf >= 17 && bf <= 19) classification = "Bom";
+        else if(bf >= 20 && bf <= 22) classification = "Abaixo da média";
+        else if(bf >= 23 && bf <= 25) classification = "Média";
+        else if(bf >= 26 && bf <= 28) classification = "Acima da média";
+        else if(bf >= 29 && bf <= 31) classification = "Alto";
+        else if(bf >= 33 && bf <= 43) classification = "Muito alto";
+        else classification = "Fora da faixa";
+      } else if(age >= 26 && age <= 35) {
+        if(bf >= 14 && bf <= 16) classification = "Excelente";
+        else if(bf >= 18 && bf <= 20) classification = "Bom";
+        else if(bf >= 21 && bf <= 23) classification = "Abaixo da média";
+        else if(bf >= 24 && bf <= 25) classification = "Média";
+        else if(bf >= 27 && bf <= 29) classification = "Acima da média";
+        else if(bf >= 31 && bf <= 33) classification = "Alto";
+        else if(bf >= 36 && bf <= 49) classification = "Muito alto";
+        else classification = "Fora da faixa";
+      } else if(age >= 36 && age <= 45) {
+        if(bf >= 16 && bf <= 19) classification = "Excelente";
+        else if(bf >= 20 && bf <= 23) classification = "Bom";
+        else if(bf >= 24 && bf <= 26) classification = "Abaixo da média";
+        else if(bf >= 27 && bf <= 29) classification = "Média";
+        else if(bf >= 30 && bf <= 32) classification = "Acima da média";
+        else if(bf >= 33 && bf <= 36) classification = "Alto";
+        else if(bf >= 38 && bf <= 48) classification = "Muito alto";
+        else classification = "Fora da faixa";
+      } else if(age >= 46 && age <= 55) {
+        if(bf >= 17 && bf <= 21) classification = "Excelente";
+        else if(bf >= 23 && bf <= 25) classification = "Bom";
+        else if(bf >= 26 && bf <= 28) classification = "Abaixo da média";
+        else if(bf >= 29 && bf <= 31) classification = "Média";
+        else if(bf >= 32 && bf <= 34) classification = "Acima da média";
+        else if(bf >= 35 && bf <= 38) classification = "Alto";
+        else if(bf >= 39 && bf <= 50) classification = "Muito alto";
+        else classification = "Fora da faixa";
+      } else if(age >= 56 && age <= 65) {
+        if(bf >= 18 && bf <= 22) classification = "Excelente";
+        else if(bf >= 24 && bf <= 26) classification = "Bom";
+        else if(bf >= 27 && bf <= 29) classification = "Abaixo da média";
+        else if(bf >= 30 && bf <= 32) classification = "Média";
+        else if(bf >= 33 && bf <= 35) classification = "Acima da média";
+        else if(bf >= 36 && bf <= 38) classification = "Alto";
+        else if(bf >= 39 && bf <= 49) classification = "Muito alto";
+        else classification = "Fora da faixa";
+      } else {
+        classification = "Idade fora do intervalo";
+      }
+      return classification;
+    }
+    
+    // Função para calcular e exibir os resultados de Bioimpedância
+    function calcularBioimpedancia() {
+      const sexoVal = document.getElementById('commonSexo').value;
+      
+      const bioPercentGordura = parseFloat(document.getElementById('bioPercentGordura').value) || 0;
+      const bioMassaLivreGordura = parseFloat(document.getElementById('bioMassaLivreGordura').value) || 0;
+      const bioPesoOsseo = parseFloat(document.getElementById('bioPesoOsseo').value) || 0;
+      const bioMassaGordura = parseFloat(document.getElementById('bioMassaGordura').value) || 0;
+      const bioIdadeMetabolica = parseFloat(document.getElementById('bioIdadeMetabolica').value) || 0;
+      const bioGorduraVisceral = parseFloat(document.getElementById('bioGorduraVisceral').value) || 0;
+      const bioMassaMuscular = parseFloat(document.getElementById('bioMassaMuscular').value) || 0;
+      const bioMassaVisceral = parseFloat(document.getElementById('bioMassaVisceral').value) || 0;
+      const bioPercMassaMuscular = parseFloat(document.getElementById('bioPercMassaMuscular').value) || 0;
+      const bioAguaCorporal = parseFloat(document.getElementById('bioAguaCorporal').value) || 0;
+      
+      let comparacaoBio = "";
+      if(sexoVal === "M") {
+        if(bioPercentGordura < 10) comparacaoBio = "Muito baixo";
+        else if(bioPercentGordura <= 20) comparacaoBio = "Normal";
+        else comparacaoBio = "Elevado";
+      } else {
+        if(bioPercentGordura < 18) comparacaoBio = "Muito baixo";
+        else if(bioPercentGordura <= 28) comparacaoBio = "Normal";
+        else comparacaoBio = "Elevado";
+      }
+      
+      const resultado = `
+        <h6>Bioimpedância</h6>
+        <ul class="list-group">
+          <li class="list-group-item">
+            <strong>Percentual de Gordura:</strong> ${bioPercentGordura}% (${comparacaoBio})
+            <i class="bi bi-info-circle info-icon" data-bs-toggle="modal" data-bs-target="#bioFatInfoModal"></i>
+          </li>
+          <li class="list-group-item"><strong>Massa Livre de Gordura:</strong> ${bioMassaLivreGordura} kg</li>
+          <li class="list-group-item"><strong>Peso Ósseo:</strong> ${bioPesoOsseo} kg</li>
+          <li class="list-group-item"><strong>Massa de Gordura:</strong> ${bioMassaGordura} kg</li>
+          <li class="list-group-item"><strong>Idade Metabólica:</strong> ${bioIdadeMetabolica}</li>
+          <li class="list-group-item"><strong>Gordura Visceral:</strong> ${bioGorduraVisceral} kg</li>
+          <li class="list-group-item"><strong>Massa Muscular:</strong> ${bioMassaMuscular} kg</li>
+          <li class="list-group-item"><strong>Massa Visceral:</strong> ${bioMassaVisceral} kg</li>
+          <li class="list-group-item"><strong>% Massa Muscular:</strong> ${bioPercMassaMuscular}%</li>
+          <li class="list-group-item"><strong>Água Corporal:</strong> ${bioAguaCorporal} kg</li>
+        </ul>
+        <p class="mt-2">Interpretação: Compare os valores com os parâmetros de referência para seu sexo e idade.</p>
+      `;
+      document.getElementById('resultadoBioimpedancia').innerHTML = resultado;
+    }
+    
+    // Função para imprimir os resultados, incluindo também os valores individuais das dobras
+    function printResults() {
+      // Coleta dos resultados já exibidos
+      let conteudo = "<h3>Resultados da Avaliação Física</h3>" +
+                     document.getElementById('resultadoAvaliacao').innerHTML +
+                     "<hr>" +
+                     "<h3>Resultados da Composição Corporal</h3>" +
+                     "<h4>Dados do Paciente</h4>" +
+                     "<ul class='list-group'>" +
+                     "<li class='list-group-item'><strong>Nome:</strong> " + (document.getElementById('patientName').value || "") + "</li>" +
+                     "<li class='list-group-item'><strong>Telefone:</strong> " + (document.getElementById('patientPhone').value || "") + "</li>" +
+                     "<li class='list-group-item'><strong>Email:</strong> " + (document.getElementById('patientEmail').value || "") + "</li>" +
+                     "</ul>" +
+                     "<h4>Medidas Antropométricas</h4>" + document.getElementById('resultadoAntropometria').innerHTML +
+                     "<h4>Dobras Cutâneas</h4>" + document.getElementById('resultadoDobras').innerHTML;
+      
+      // Adiciona os valores individuais das dobras
+      const dobras = [
+        {nome: "Peito", valor: document.getElementById('dobraPeito').value},
+        {nome: "Axilar Média", valor: document.getElementById('dobraAxilar').value},
+        {nome: "Tríceps", valor: document.getElementById('dobraTriceps').value},
+        {nome: "Subescapular", valor: document.getElementById('dobraSubescapular').value},
+        {nome: "Abdominal", valor: document.getElementById('dobraAbdominal').value},
+        {nome: "Suprailiaca", valor: document.getElementById('dobraSuprailiaca').value},
+        {nome: "Coxa", valor: document.getElementById('dobraCoxa').value}
+      ];
+      
+      let dobrasHTML = "<h4>Valores Individuais das Dobras</h4><ul class='list-group'>";
+      dobras.forEach(item => {
+        dobrasHTML += "<li class='list-group-item'><strong>" + item.nome + ":</strong> " + (item.valor || "0") + " mm</li>";
+      });
+      dobrasHTML += "</ul>";
+      
+      conteudo += dobrasHTML +
+                  "<h4>Bioimpedância</h4>" + document.getElementById('resultadoBioimpedancia').innerHTML;
+      
+      let printWindow = window.open('', '', 'height=800,width=800');
+      printWindow.document.write('<html><head><title>Resultados</title>');
+      printWindow.document.write('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">');
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(conteudo);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    }
+  </script>
+</body>
+</html>
